@@ -32,7 +32,6 @@ const GrowthAuditor: React.FC = () => {
 
   return (
     <section id="auditor" className="py-24 px-6 bg-white scroll-mt-20 relative overflow-hidden">
-      {/* Decorative background element to transition from white section to dark card */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
 
       <div className="max-w-4xl mx-auto relative z-10">
@@ -42,9 +41,7 @@ const GrowthAuditor: React.FC = () => {
           <p className="text-slate-500 mt-4 text-lg font-light">Architect your infrastructure by identifying operational bottlenecks.</p>
         </div>
 
-        {/* The "Blank Area" converted to high-premium Dark Mode */}
         <div className="bg-slate-900 rounded-[2.5rem] p-8 lg:p-14 shadow-2xl border border-slate-800 relative group overflow-hidden">
-          {/* Animated glow border effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
           
           <form onSubmit={handleAudit} className="relative z-10 space-y-8">
@@ -54,7 +51,7 @@ const GrowthAuditor: React.FC = () => {
                 <input 
                   type="text" 
                   placeholder="e.g., Performance Creative"
-                  className="w-full bg-slate-950/50 px-6 py-4 rounded-2xl border border-slate-800 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all shadow-inner"
+                  className="w-full !bg-slate-950 !text-white px-6 py-4 rounded-2xl border border-slate-800 placeholder:text-slate-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all shadow-inner"
                   value={state.agencyNiche}
                   onChange={(e) => setState(prev => ({ ...prev, agencyNiche: e.target.value }))}
                 />
@@ -62,14 +59,14 @@ const GrowthAuditor: React.FC = () => {
               <div className="space-y-3">
                 <label className="block text-sm font-bold text-emerald-500/80 uppercase tracking-widest ml-1">Team Size</label>
                 <select 
-                  className="w-full bg-slate-950/50 px-6 py-4 rounded-2xl border border-slate-800 text-white focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all shadow-inner appearance-none cursor-pointer"
+                  className="w-full !bg-slate-950 !text-white px-6 py-4 rounded-2xl border border-slate-800 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all shadow-inner appearance-none cursor-pointer"
                   value={state.teamSize}
                   onChange={(e) => setState(prev => ({ ...prev, teamSize: e.target.value }))}
                 >
-                  <option value="1-5">1-5 Members</option>
-                  <option value="6-15">6-15 Members</option>
-                  <option value="16-50">16-50 Members</option>
-                  <option value="50+">50+ Members</option>
+                  <option value="1-5" className="bg-slate-900 text-white">1-5 Members</option>
+                  <option value="6-15" className="bg-slate-900 text-white">6-15 Members</option>
+                  <option value="16-50" className="bg-slate-900 text-white">16-50 Members</option>
+                  <option value="50+" className="bg-slate-900 text-white">50+ Members</option>
                 </select>
               </div>
             </div>
@@ -78,7 +75,7 @@ const GrowthAuditor: React.FC = () => {
               <label className="block text-sm font-bold text-emerald-500/80 uppercase tracking-widest ml-1">Primary Manual Bottleneck</label>
               <textarea 
                 placeholder="What is the single most manual task slowing your growth? (e.g. Sales proposals, content repurposing...)"
-                className="w-full bg-slate-950/50 px-6 py-5 rounded-2xl border border-slate-800 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all h-36 resize-none shadow-inner"
+                className="w-full !bg-slate-950 !text-white px-6 py-5 rounded-2xl border border-slate-800 placeholder:text-slate-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all h-36 resize-none shadow-inner"
                 value={state.bottleneck}
                 onChange={(e) => setState(prev => ({ ...prev, bottleneck: e.target.value }))}
               />
@@ -113,8 +110,7 @@ const GrowthAuditor: React.FC = () => {
           </form>
 
           {state.result && (
-            <div className="mt-14 bg-slate-950/80 rounded-3xl p-10 border border-emerald-500/30 shadow-[0_0_50px_-12px_rgba(16,185,129,0.3)] animate-fade-in relative">
-              {/* Scanline animation effect */}
+            <div className="mt-14 bg-slate-950 rounded-3xl p-10 border border-emerald-500/30 shadow-[0_0_50px_-12px_rgba(16,185,129,0.3)] animate-fade-in relative">
               <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/20 animate-scan"></div>
               
               <div className="flex items-center gap-4 mb-8">
@@ -131,4 +127,36 @@ const GrowthAuditor: React.FC = () => {
                 {state.result}
               </div>
 
-              <div className="mt-12 p-8 bg-emerald-600 rounded-[2rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden group/
+              <div className="mt-12 p-8 bg-emerald-600 rounded-[2rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden group/cta">
+                <div className="absolute inset-0 bg-slate-900 translate-x-[-101%] group-hover/cta:translate-x-0 transition-transform duration-500 ease-in-out"></div>
+                <div className="relative z-10">
+                  <div className="text-emerald-200 group-hover/cta:text-emerald-400 font-bold uppercase tracking-widest text-xs mb-1 transition-colors">Immediate Action Required</div>
+                  <div className="text-xl font-bold">Implement Infrastructure Roadmap</div>
+                </div>
+                <button 
+                  onClick={() => window.open('https://cal.com/sumahi-ai-hqp1nf/secret', '_blank')}
+                  className="relative z-10 bg-white group-hover/cta:bg-emerald-600 text-slate-900 group-hover/cta:text-white px-10 py-4 rounded-xl font-black transition-all shadow-xl hover:scale-105 active:scale-95 shrink-0"
+                >
+                  Secure Deployment Slot
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes scan {
+          0% { top: 0; opacity: 0; }
+          50% { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+        .animate-scan {
+          animation: scan 3s linear infinite;
+        }
+      `}</style>
+    </section>
+  );
+};
+
+export default GrowthAuditor;

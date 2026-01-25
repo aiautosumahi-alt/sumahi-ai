@@ -12,10 +12,17 @@
         h1, h2, h3, h4, .font-lexend { font-family: 'Lexend', sans-serif; }
         .bg-slate-925 { background-color: #0f172a; }
         .emerald-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f8fafc; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Custom Scrollbar for Premium Feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #059669; }
+
+        /* Prevent default styling of select/input in some browsers */
+        input, select, textarea {
+            color-scheme: dark;
+        }
     </style>
 <script type="importmap">
 {
@@ -30,5 +37,7 @@
 </head>
 <body class="bg-white text-slate-900 overflow-x-hidden">
     <div id="root"></div>
+    <!-- Entry point for the React application -->
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>
