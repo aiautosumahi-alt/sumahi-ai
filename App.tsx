@@ -8,6 +8,7 @@ import GrowthAuditor from './components/GrowthAuditor';
 import TrustSecurity from './components/TrustSecurity';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
 
 const App: React.FC = () => {
   return (
@@ -35,12 +36,20 @@ const App: React.FC = () => {
             <p className="text-emerald-100 mt-8 text-xl lg:text-2xl max-w-2xl mx-auto font-light leading-relaxed">
               Stop paying the "Manual Tax." Book your strategy session to see the roadmap for your agency's AI transformation.
             </p>
-            <button 
-              onClick={() => window.open('https://cal.com/sumahi-ai-hqp1nf/secret', '_blank')}
-              className="mt-12 bg-slate-900 text-white px-12 py-6 rounded-2xl text-2xl font-bold hover:bg-black transition-all shadow-2xl hover:scale-105 active:scale-95"
-            >
-              Book Your AI Strategy Session
-            </button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
+              <button 
+                onClick={() => window.open('https://cal.com/sumahi-ai-hqp1nf/secret', '_blank')}
+                className="bg-slate-900 text-white px-12 py-6 rounded-2xl text-xl font-bold hover:bg-black transition-all shadow-2xl hover:scale-105 active:scale-95 w-full sm:w-auto"
+              >
+                Book AI Strategy Session
+              </button>
+              <button 
+                onClick={() => window.open('https://wa.me/918074251396?text=I%20want%20AI%20automation%20for%20my%20agency', '_blank')}
+                className="bg-white text-[#25D366] px-12 py-6 rounded-2xl text-xl font-bold hover:bg-slate-50 transition-all shadow-2xl hover:scale-105 active:scale-95 w-full sm:w-auto border-2 border-[#25D366]/20"
+              >
+                Message on WhatsApp
+              </button>
+            </div>
             <div className="mt-8 text-emerald-200 text-sm font-bold uppercase tracking-[0.2em]">
               Limited to 2 Implementation slots per month
             </div>
@@ -49,6 +58,9 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
+      
+      {/* Persistent Floating WhatsApp CTA */}
+      <WhatsAppButton />
 
       {/* Global Animation Styles */}
       <style>{`
