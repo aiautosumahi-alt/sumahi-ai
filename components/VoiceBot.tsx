@@ -46,6 +46,7 @@ const VoiceBot: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
   
   const sessionRef = useRef<any>(null);
   const inputAudioCtxRef = useRef<AudioContext | null>(null);
@@ -55,19 +56,37 @@ const VoiceBot: React.FC = () => {
   const sourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
 
   const startSession = async () => {
+    setIsConnecting(true);
+    setError(null);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+        throw new Error("System API Key missing. Please check infrastructure configuration.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       
+      // Initialize Contexts
       inputAudioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       outputAudioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       
-      streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Explicitly resume for browser security
+      await inputAudioCtxRef.current.resume();
+      await outputAudioCtxRef.current.resume();
+
+      // Request Mic
+      try {
+        streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (micErr) {
+        throw new Error("Microphone access denied. Please enable mic permissions in your browser settings to use the Voice Architect.");
+      }
 
       const sessionPromise = ai.live.connect({
         model: 'gemini-2.5-flash-native-audio-preview-12-2025',
         callbacks: {
           onopen: () => {
             setIsActive(true);
+            setIsConnecting(false);
             setError(null);
             
             // Start streaming from mic
@@ -118,7 +137,7 @@ const VoiceBot: React.FC = () => {
 
             if (message.serverContent?.interrupted) {
               for (const source of sourcesRef.current.values()) {
-                source.stop();
+                try { source.stop(); } catch(e) {}
               }
               sourcesRef.current.clear();
               nextStartTimeRef.current = 0;
@@ -127,7 +146,7 @@ const VoiceBot: React.FC = () => {
           },
           onerror: (e) => {
             console.error("Live API Error:", e);
-            setError("Connection lost. Please try again.");
+            setError("The neural link was interrupted. This usually happens due to unstable network connectivity.");
             stopSession();
           },
           onclose: () => {
@@ -147,14 +166,19 @@ const VoiceBot: React.FC = () => {
       sessionRef.current = await sessionPromise;
     } catch (err: any) {
       console.error(err);
-      setError("Microphone access denied or connection failed.");
+      setError(err.message || "Failed to initialize secure voice link.");
       setIsActive(false);
+      setIsConnecting(false);
+      // Clean up if partial failure
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
     }
   };
 
   const stopSession = () => {
     if (sessionRef.current) {
-      // In a real scenario we'd call session.close() but based on provided API:
+      try { sessionRef.current.close(); } catch(e) {}
       sessionRef.current = null;
     }
     if (streamRef.current) {
@@ -171,6 +195,7 @@ const VoiceBot: React.FC = () => {
     }
     setIsActive(false);
     setIsSpeaking(false);
+    setIsConnecting(false);
     nextStartTimeRef.current = 0;
     sourcesRef.current.clear();
   };
@@ -214,7 +239,6 @@ const VoiceBot: React.FC = () => {
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-xl animate-fade-in">
           <div className="bg-slate-900 w-full max-w-xl rounded-[3rem] p-12 border border-white/5 shadow-2xl relative overflow-hidden flex flex-col items-center">
             
-            {/* Background Ambience */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-emerald-500/5 blur-[100px] rounded-full"></div>
             
@@ -237,11 +261,9 @@ const VoiceBot: React.FC = () => {
 
             {/* Visualizer Orb */}
             <div className="relative w-48 h-48 mb-12 flex items-center justify-center">
-              {/* Outer Rings */}
               <div className={`absolute inset-0 border border-emerald-500/20 rounded-full transition-transform duration-1000 ${isActive ? 'animate-spin-slow' : ''}`}></div>
               <div className={`absolute inset-4 border border-emerald-500/10 rounded-full transition-transform duration-700 ${isActive ? 'animate-spin-reverse-slow' : ''}`}></div>
               
-              {/* Core Visualizer */}
               <div className={`relative w-32 h-32 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border border-emerald-500/30 shadow-[0_0_40px_-10px_rgba(16,185,129,0.3)] ${isActive ? 'scale-105' : 'scale-100'} transition-transform duration-500`}>
                 {isActive ? (
                   <div className="flex items-center gap-1.5 h-12">
@@ -256,7 +278,7 @@ const VoiceBot: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="w-4 h-4 rounded-full bg-emerald-500/20 animate-pulse"></div>
+                  <div className={`w-4 h-4 rounded-full bg-emerald-500/20 ${isConnecting ? 'animate-ping' : 'animate-pulse'}`}></div>
                 )}
               </div>
             </div>
@@ -264,18 +286,35 @@ const VoiceBot: React.FC = () => {
             {/* Actions */}
             <div className="w-full space-y-6 flex flex-col items-center relative z-10">
               {error && (
-                <div className="text-red-400 text-xs font-bold bg-red-500/5 px-4 py-2 rounded-xl border border-red-500/10">
+                <div className="text-red-400 text-center text-sm font-bold bg-red-500/10 px-6 py-4 rounded-2xl border border-red-500/20 max-w-sm">
                   {error}
+                  {error.includes("Microphone") && (
+                    <div className="mt-2 text-xs font-medium text-slate-500">
+                      Look for a camera/mic icon in your address bar to enable access.
+                    </div>
+                  )}
                 </div>
               )}
               
               {!isActive ? (
                 <button 
                   onClick={startSession}
-                  className="bg-emerald-600 text-white px-12 py-5 rounded-2xl text-lg font-black hover:bg-emerald-500 transition-all shadow-2xl hover:scale-105 active:scale-95 flex items-center gap-3"
+                  disabled={isConnecting}
+                  className={`bg-emerald-600 text-white px-12 py-5 rounded-2xl text-lg font-black transition-all shadow-2xl flex items-center gap-3 ${
+                    isConnecting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-500 hover:scale-105 active:scale-95'
+                  }`}
                 >
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8a8 8 0 11-8 8z" /></svg>
-                  Initialize Link
+                  {isConnecting ? (
+                    <>
+                      <svg className="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                      Initializing...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8a8 8 0 11-8 8z" /></svg>
+                      Initialize Link
+                    </>
+                  )}
                 </button>
               ) : (
                 <div className="flex flex-col items-center gap-4">
