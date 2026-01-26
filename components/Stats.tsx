@@ -10,13 +10,13 @@ const Stats: React.FC = () => {
   ];
 
   return (
-    <section className="bg-slate-900 py-20 px-6 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/20"></div>
+    <section className="bg-slate-950 py-20 px-6 relative overflow-hidden border-y border-white/5">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-600/20 to-transparent"></div>
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-12 text-center">
           {stats.map((stat, idx) => (
             <div key={idx} className="group flex flex-col items-center">
-              <div className="text-4xl lg:text-5xl font-bold text-emerald-400 tracking-tight mb-2 group-hover:scale-110 transition-transform duration-500">
+              <div className="text-4xl lg:text-5xl font-bold text-red-600 tracking-tight mb-2 group-hover:scale-110 transition-transform duration-500">
                 {stat.value}
               </div>
               <div className="text-white text-sm font-bold uppercase tracking-[0.2em] mb-2">

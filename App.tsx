@@ -13,7 +13,7 @@ import VoiceBot from './components/VoiceBot';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-950 selection:bg-red-600 selection:text-white">
       <Navbar />
       
       <main>
@@ -29,30 +29,30 @@ const App: React.FC = () => {
         <FAQ />
         
         {/* Final CTA Section */}
-        <section className="py-24 bg-emerald-600 px-6 text-center">
+        <section className="py-24 bg-red-700 px-6 text-center border-t border-white/5">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl lg:text-6xl font-bold text-white leading-tight font-lexend">
-              Your Competitors Are Automating.<br />Will You Catch Up or Be Replaced?
+              The Matrix is Automating.<br />Sync Now or Be Replaced.
             </h2>
-            <p className="text-emerald-100 mt-8 text-xl lg:text-2xl max-w-2xl mx-auto font-light leading-relaxed">
-              Stop paying the "Manual Tax." Book your strategy session to see the roadmap for your agency's AI transformation.
+            <p className="text-red-100 mt-8 text-xl lg:text-2xl max-w-2xl mx-auto font-light leading-relaxed">
+              Stop paying the manual tax. Initialize your strategy session for full AI transition.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
               <button 
                 onClick={() => window.open('https://cal.com/sumahi-ai-hqp1nf/secret', '_blank')}
-                className="bg-slate-900 text-white px-12 py-6 rounded-2xl text-xl font-bold hover:bg-black transition-all shadow-2xl hover:scale-105 active:scale-95 w-full sm:w-auto"
+                className="bg-slate-950 text-white px-12 py-6 rounded-2xl text-xl font-bold hover:bg-black transition-all shadow-2xl hover:scale-105 active:scale-95 w-full sm:w-auto"
               >
-                Book AI Strategy Session
+                Secure Implementation Slot
               </button>
               <button 
                 onClick={() => window.open('https://wa.me/918074251396?text=I%20want%20AI%20automation%20for%20my%20agency', '_blank')}
-                className="bg-white text-[#25D366] px-12 py-6 rounded-2xl text-xl font-bold hover:bg-slate-50 transition-all shadow-2xl hover:scale-105 active:scale-95 w-full sm:w-auto border-2 border-[#25D366]/20"
+                className="bg-white text-red-700 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-slate-100 transition-all shadow-2xl hover:scale-105 active:scale-95 w-full sm:w-auto border-2 border-red-800/20"
               >
-                Message on WhatsApp
+                Direct WhatsApp Link
               </button>
             </div>
-            <div className="mt-8 text-emerald-200 text-sm font-bold uppercase tracking-[0.2em]">
-              Limited to 2 Implementation slots per month
+            <div className="mt-8 text-red-200 text-sm font-bold uppercase tracking-[0.2em]">
+              High-priority slots limited to 2 per cycle
             </div>
           </div>
         </section>
@@ -85,8 +85,8 @@ const App: React.FC = () => {
           animation-delay: 2s;
         }
         @keyframes logoPulse {
-          0%, 100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 0 rgba(16,185,129,0)); }
-          50% { opacity: 0.9; transform: scale(1.02); filter: drop-shadow(0 0 8px rgba(16,185,129,0.4)); }
+          0%, 100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 0 rgba(220,38,38,0)); }
+          50% { opacity: 0.9; transform: scale(1.02); filter: drop-shadow(0 0 8px rgba(220,38,38,0.4)); }
         }
         .animate-logo-pulse {
           animation: logoPulse 4s infinite ease-in-out;
@@ -98,6 +98,14 @@ const App: React.FC = () => {
         .animate-shimmer {
           animation: shimmer 6s linear infinite;
         }
+        @keyframes stream {
+          0% { transform: translateY(-100%); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(100%); opacity: 0; }
+        }
+        .animate-stream-1 { animation: stream 12s linear infinite; }
+        .animate-stream-2 { animation: stream 8s linear infinite; animation-delay: 2s; }
+        .animate-stream-3 { animation: stream 10s linear infinite; animation-delay: 4s; }
       `}</style>
     </div>
   );
