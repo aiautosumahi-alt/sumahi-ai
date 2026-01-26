@@ -33,7 +33,7 @@ const FAQ: React.FC = () => {
             <div 
               key={idx} 
               className={`bg-slate-900 rounded-[1.5rem] border transition-all overflow-hidden ${
-                openIndex === idx ? 'border-red-900/40 shadow-xl' : 'border-white/5'
+                openIndex === idx ? 'border-white shadow-xl' : 'border-white/30'
               }`}
             >
               <button 

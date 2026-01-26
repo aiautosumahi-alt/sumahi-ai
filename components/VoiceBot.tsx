@@ -191,12 +191,21 @@ const VoiceBot: React.FC = () => {
     sourcesRef.current.clear();
   };
 
+  const toggleModal = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+    } else {
+      stopSession();
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       <div className="fixed bottom-8 left-8 z-[60] flex flex-col items-start gap-4">
         <button 
           onClick={toggleModal}
-          className="relative group w-16 h-16 rounded-full bg-slate-900 text-red-600 flex items-center justify-center shadow-[0_10px_40px_-10px_rgba(220,38,38,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 border border-red-600/20"
+          className="relative group w-16 h-16 rounded-full bg-slate-900 text-red-600 flex items-center justify-center shadow-[0_10px_40px_-10px_rgba(220,38,38,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 border border-white/40"
         >
           <div className="absolute inset-0 bg-red-600/5 rounded-full animate-pulse"></div>
           <svg className={`w-8 h-8 transition-transform duration-500 ${isOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,16 +217,16 @@ const VoiceBot: React.FC = () => {
           </svg>
         </button>
         {!isOpen && (
-          <div className="bg-slate-900 text-white px-4 py-2 rounded-xl shadow-2xl border border-white/10 text-sm font-bold animate-fade-in hidden md:block">
+          <div className="bg-slate-900 text-white px-4 py-2 rounded-xl shadow-2xl border border-white/40 text-sm font-bold animate-fade-in hidden md:block">
             Voice Sync
-            <div className="absolute -bottom-1 left-6 w-2 h-2 bg-slate-900 border-l border-t border-white/10 rotate-45"></div>
+            <div className="absolute -bottom-1 left-6 w-2 h-2 bg-slate-900 border-l border-t border-white/40 rotate-45"></div>
           </div>
         )}
       </div>
 
       {isOpen && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl animate-fade-in">
-          <div className="bg-slate-900 w-full max-w-xl rounded-[3rem] p-12 border border-white/10 shadow-2xl relative overflow-hidden flex flex-col items-center">
+          <div className="bg-slate-900 w-full max-w-xl rounded-[3rem] p-12 border border-white/60 shadow-2xl relative overflow-hidden flex flex-col items-center">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600/20 to-transparent"></div>
             
             <button 
@@ -228,7 +237,7 @@ const VoiceBot: React.FC = () => {
             </button>
 
             <div className="text-center space-y-4 mb-12">
-              <div className="inline-block bg-red-600/10 text-red-500 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.3em] border border-red-600/20">
+              <div className="inline-block bg-red-600/10 text-red-500 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.3em] border border-white/20">
                 Neural Voice Core
               </div>
               <h3 className="text-3xl font-bold text-white font-lexend">Voice Architect</h3>
@@ -241,7 +250,7 @@ const VoiceBot: React.FC = () => {
               <div className={`absolute inset-0 border border-red-600/20 rounded-full transition-transform duration-1000 ${isActive ? 'animate-spin-slow' : ''}`}></div>
               <div className={`absolute inset-4 border border-red-600/10 rounded-full transition-transform duration-700 ${isActive ? 'animate-spin-reverse-slow' : ''}`}></div>
               
-              <div className={`relative w-32 h-32 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border border-red-600/30 shadow-[0_0_40px_-10px_rgba(220,38,38,0.3)] ${isActive ? 'scale-105' : 'scale-100'} transition-transform duration-500`}>
+              <div className={`relative w-32 h-32 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border border-white/40 shadow-[0_0_40px_-10px_rgba(220,38,38,0.3)] ${isActive ? 'scale-105' : 'scale-100'} transition-transform duration-500`}>
                 {isActive ? (
                   <div className="flex items-center gap-1.5 h-12">
                     {[...Array(6)].map((_, i) => (
@@ -271,7 +280,7 @@ const VoiceBot: React.FC = () => {
                 <button 
                   onClick={startSession}
                   disabled={isConnecting}
-                  className={`bg-red-700 text-white px-12 py-5 rounded-2xl text-lg font-black transition-all shadow-2xl flex items-center gap-3 ${
+                  className={`bg-red-700 text-white px-12 py-5 rounded-2xl text-lg font-black transition-all shadow-2xl flex items-center gap-3 border border-white/20 ${
                     isConnecting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 hover:scale-105 active:scale-95'
                   }`}
                 >
@@ -313,15 +322,6 @@ const VoiceBot: React.FC = () => {
       `}</style>
     </>
   );
-
-  function toggleModal() {
-    if (!isOpen) {
-      setIsOpen(true);
-    } else {
-      stopSession();
-      setIsOpen(false);
-    }
-  }
 };
 
 export default VoiceBot;
