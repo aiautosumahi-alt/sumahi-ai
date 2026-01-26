@@ -1,10 +1,9 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || "";
-
 export const runGrowthAudit = async (niche: string, teamSize: string, bottleneck: string): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
+  // Create instance inside the function as per guidelines to ensure freshest key
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   const prompt = `
     Act as a World-Class AI Operations & Growth Consultant for "Sumahi Ai". 
@@ -33,12 +32,19 @@ export const runGrowthAudit = async (niche: string, teamSize: string, bottleneck
         topP: 0.95,
         topK: 64,
         maxOutputTokens: 1024,
+        // When maxOutputTokens is used with Gemini 3 models, thinkingBudget should be managed.
+        // Disabling thinking budget ensures maximum tokens are available for the final response.
+        thinkingConfig: { thinkingBudget: 0 },
       }
     });
 
     return response.text || "I was unable to generate a report at this time. Please try again later.";
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
+    // If the error suggests missing project or key, we throw specifically
+    if (error.message?.includes("entity was not found") || error.message?.includes("API key")) {
+      throw new Error("Neural Core authentication failed. Please re-initialize infrastructure.");
+    }
     throw new Error("Failed to communicate with AI Auditor. Please check your connection.");
   }
 };

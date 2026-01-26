@@ -9,7 +9,8 @@ const Hero: React.FC = () => {
   const generateCoverPhoto = async () => {
     setIsLoading(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+      // Instance created locally to ensure freshest key
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
@@ -26,10 +27,13 @@ const Hero: React.FC = () => {
         }
       });
 
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData) {
-          setImageUrl(`data:image/png;base64,${part.inlineData.data}`);
-          break;
+      // Find the image part, do not assume it is the first part as per guidelines
+      if (response.candidates && response.candidates[0].content.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData) {
+            setImageUrl(`data:image/png;base64,${part.inlineData.data}`);
+            break;
+          }
         }
       }
     } catch (error) {
@@ -105,89 +109,35 @@ const Hero: React.FC = () => {
               >
                 <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
                   <svg className={`w-5 h-5 ${isLoading ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
                 </div>
-                <span className="text-sm font-semibold tracking-wide">Regenerate View</span>
+                <span className="text-sm font-bold tracking-widest uppercase">Refresh Neural Visual</span>
               </button>
             </div>
           </div>
 
-          {/* AI Cover Photo Visualizer */}
-          <div className="lg:col-span-7 relative">
-            <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl group ring-1 ring-emerald-500/20">
+          {/* Image Side */}
+          <div className="lg:col-span-7 relative group">
+            <div className="absolute -inset-4 bg-emerald-500/10 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+            <div className="relative rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl aspect-[16/9] bg-slate-900">
               {isLoading ? (
-                <div className="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center space-y-4">
-                  <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-                  <div className="text-emerald-500 text-xs font-bold uppercase tracking-[0.3em] animate-pulse">Architecting Visual...</div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
+                  <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+                  <div className="text-emerald-500/60 text-xs font-bold uppercase tracking-widest animate-pulse">Rendering Infrastructure...</div>
                 </div>
-              ) : (
-                <>
-                  <img 
-                    src={imageUrl || ""} 
-                    alt="AI Generated Infrastructure" 
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[4000ms]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/60 via-transparent to-emerald-950/20 pointer-events-none"></div>
-                  
-                  {/* Floating Status Card Overlay */}
-                  <div className="absolute top-8 right-8 animate-float-slow">
-                    <div className="bg-slate-950/80 backdrop-blur-2xl border border-white/10 p-5 rounded-[2rem] shadow-2xl">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                          <svg className="w-5 h-5 text-emerald-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                        </div>
-                        <div>
-                          <div className="text-white text-sm font-bold">System Status</div>
-                          <div className="text-emerald-400 text-xs font-medium">Optimal Efficiency</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Security Compliance Badges */}
-                  <div className="absolute bottom-8 left-8 flex flex-wrap gap-4 pointer-events-none">
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl flex flex-col items-center animate-float-delayed">
-                      <span className="text-white font-bold text-sm">GDPR</span>
-                      <span className="text-[8px] text-slate-400 tracking-[0.2em] font-bold">COMPLIANT</span>
-                    </div>
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl flex flex-col items-center animate-float-slow">
-                      <span className="text-white font-bold text-sm">SOC 2</span>
-                      <span className="text-[8px] text-slate-400 tracking-[0.2em] font-bold">TYPE 2 READY</span>
-                    </div>
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl flex flex-col items-center animate-float-delayed" style={{ animationDelay: '1s' }}>
-                      <span className="text-white font-bold text-sm">AES-256</span>
-                      <span className="text-[8px] text-slate-400 tracking-[0.2em] font-bold">ENCRYPTED</span>
-                    </div>
-                  </div>
-
-                  {/* AI Brand Label */}
-                  <div className="absolute bottom-8 right-8">
-                    <div className="bg-emerald-500/15 backdrop-blur-xl border border-emerald-500/30 px-5 py-2.5 rounded-full ring-1 ring-emerald-500/20">
-                      <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em]">Live Architect View</span>
-                    </div>
-                  </div>
-                </>
+              ) : imageUrl && (
+                <img 
+                  src={imageUrl} 
+                  alt="AI Infrastructure Visualization" 
+                  className="w-full h-full object-cover animate-fade-in"
+                />
               )}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
             </div>
-            
-            {/* Background Decorative Rings */}
-            <div className="absolute -z-10 -bottom-10 -left-10 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute -z-10 top-[-20px] right-[-20px] w-64 h-64 border border-white/5 rounded-full opacity-50"></div>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes stream {
-          0% { transform: translateY(-100%); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateY(100%); opacity: 0; }
-        }
-        .animate-stream-1 { animation: stream 4s infinite linear; }
-        .animate-stream-2 { animation: stream 6s infinite linear; animation-delay: 1s; }
-        .animate-stream-3 { animation: stream 5s infinite linear; animation-delay: 2s; }
-      `}</style>
     </section>
   );
 };
