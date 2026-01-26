@@ -1,5 +1,7 @@
 {
   "name": "Sumahi Ai - Premium AI Growth Infrastructure",
-  "description": "A high-performance React application for an AI infrastructure agency, featuring a functional AI Growth Auditor powered by Gemini to help marketing agencies identify operational bottlenecks and ROI opportunities.",
-  "requestFramePermissions": []
+  "description": "A high-performance React application for an AI infrastructure agency, featuring a functional AI Growth Auditor and Live Voice Bot powered by Gemini.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
 }

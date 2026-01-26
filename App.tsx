@@ -9,6 +9,7 @@ import TrustSecurity from './components/TrustSecurity';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
+import VoiceBot from './components/VoiceBot';
 
 const App: React.FC = () => {
   return (
@@ -59,8 +60,9 @@ const App: React.FC = () => {
 
       <Footer />
       
-      {/* Persistent Floating WhatsApp CTA */}
+      {/* Persistent Floating Contact & AI Interaction */}
       <WhatsAppButton />
+      <VoiceBot />
 
       {/* Global Animation Styles */}
       <style>{`
