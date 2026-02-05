@@ -33,7 +33,7 @@ const FAQ: React.FC = () => {
             <div 
               key={idx} 
               className={`bg-slate-900 rounded-[1.5rem] border transition-all overflow-hidden ${
-                openIndex === idx ? 'border-white shadow-xl' : 'border-white/30'
+                openIndex === idx ? 'border-white shadow-xl shadow-cyan-900/5' : 'border-white/30'
               }`}
             >
               <button 
@@ -41,7 +41,7 @@ const FAQ: React.FC = () => {
                 className="w-full px-8 py-6 flex items-center justify-between text-left"
               >
                 <span className="font-bold text-lg text-slate-100">{faq.question}</span>
-                <span className={`transform transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-red-600' : 'text-slate-500'}`}>
+                <span className={`transform transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-cyan-400' : 'text-slate-500'}`}>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
               </button>

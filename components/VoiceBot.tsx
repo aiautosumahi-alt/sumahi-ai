@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality, Blob } from '@google/genai';
 
-// --- Audio Utility Functions ---
 function encode(bytes: Uint8Array) {
   let binary = '';
   const len = bytes.byteLength;
@@ -61,7 +60,7 @@ const VoiceBot: React.FC = () => {
     try {
       const apiKey = process.env.API_KEY;
       if (!apiKey) {
-        throw new Error("System API Key missing. Please check infrastructure configuration.");
+        throw new Error("System API Key missing.");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -75,7 +74,7 @@ const VoiceBot: React.FC = () => {
       try {
         streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch (micErr) {
-        throw new Error("Microphone access denied. Please enable mic permissions in your browser settings to use the Voice Architect.");
+        throw new Error("Microphone access denied.");
       }
 
       const sessionPromise = ai.live.connect({
@@ -142,7 +141,7 @@ const VoiceBot: React.FC = () => {
           },
           onerror: (e) => {
             console.error("Live API Error:", e);
-            setError("Neural link interrupted. Signal lost.");
+            setError("Neural link interrupted.");
             stopSession();
           },
           onclose: () => {
@@ -155,7 +154,7 @@ const VoiceBot: React.FC = () => {
           speechConfig: {
             voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } },
           },
-          systemInstruction: 'You are Sumahi, a high-performance AI Architect. You help agency owners automate manual friction points. Be direct, authoritative, and focused on system power.',
+          systemInstruction: 'You are Sumahi, a high-performance AI Architect.',
         },
       });
 
@@ -205,9 +204,9 @@ const VoiceBot: React.FC = () => {
       <div className="fixed bottom-8 left-8 z-[60] flex flex-col items-start gap-4">
         <button 
           onClick={toggleModal}
-          className="relative group w-16 h-16 rounded-full bg-slate-900 text-red-600 flex items-center justify-center shadow-[0_10px_40px_-10px_rgba(220,38,38,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 border border-white/40"
+          className="relative group w-16 h-16 rounded-full bg-slate-900 text-cyan-400 flex items-center justify-center shadow-[0_10px_40px_-10px_rgba(6,182,212,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 border border-white/40"
         >
-          <div className="absolute inset-0 bg-red-600/5 rounded-full animate-pulse"></div>
+          <div className="absolute inset-0 bg-cyan-500/5 rounded-full animate-pulse"></div>
           <svg className={`w-8 h-8 transition-transform duration-500 ${isOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -227,7 +226,7 @@ const VoiceBot: React.FC = () => {
       {isOpen && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl animate-fade-in">
           <div className="bg-slate-900 w-full max-w-xl rounded-[3rem] p-12 border border-white/60 shadow-2xl relative overflow-hidden flex flex-col items-center">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600/20 to-transparent"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
             
             <button 
               onClick={() => { stopSession(); setIsOpen(false); }}
@@ -237,26 +236,26 @@ const VoiceBot: React.FC = () => {
             </button>
 
             <div className="text-center space-y-4 mb-12">
-              <div className="inline-block bg-red-600/10 text-red-500 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.3em] border border-white/20">
+              <div className="inline-block bg-cyan-600/10 text-cyan-400 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.3em] border border-white/20">
                 Neural Voice Core
               </div>
               <h3 className="text-3xl font-bold text-white font-lexend">Voice Architect</h3>
               <p className="text-slate-500 text-sm max-w-xs mx-auto font-medium">
-                Real-time technical roadmap discussion via encrypted link.
+                Real-time technical discussion via encrypted neural link.
               </p>
             </div>
 
             <div className="relative w-48 h-48 mb-12 flex items-center justify-center">
-              <div className={`absolute inset-0 border border-red-600/20 rounded-full transition-transform duration-1000 ${isActive ? 'animate-spin-slow' : ''}`}></div>
-              <div className={`absolute inset-4 border border-red-600/10 rounded-full transition-transform duration-700 ${isActive ? 'animate-spin-reverse-slow' : ''}`}></div>
+              <div className={`absolute inset-0 border border-cyan-500/20 rounded-full transition-transform duration-1000 ${isActive ? 'animate-spin-slow' : ''}`}></div>
+              <div className={`absolute inset-4 border border-violet-500/10 rounded-full transition-transform duration-700 ${isActive ? 'animate-spin-reverse-slow' : ''}`}></div>
               
-              <div className={`relative w-32 h-32 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border border-white/40 shadow-[0_0_40px_-10px_rgba(220,38,38,0.3)] ${isActive ? 'scale-105' : 'scale-100'} transition-transform duration-500`}>
+              <div className={`relative w-32 h-32 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border border-white/40 shadow-[0_0_40px_-10px_rgba(6,182,212,0.3)] ${isActive ? 'scale-105' : 'scale-100'} transition-transform duration-500`}>
                 {isActive ? (
                   <div className="flex items-center gap-1.5 h-12">
                     {[...Array(6)].map((_, i) => (
                       <div 
                         key={i} 
-                        className={`w-1.5 bg-red-600 rounded-full transition-all duration-150 ${
+                        className={`w-1.5 bg-gradient-to-t from-cyan-500 to-violet-500 rounded-full transition-all duration-150 ${
                           isSpeaking ? 'animate-visualizer-high' : 'animate-visualizer-low'
                         }`}
                         style={{ animationDelay: `${i * 0.1}s` }}
@@ -264,14 +263,14 @@ const VoiceBot: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className={`w-4 h-4 rounded-full bg-red-600/20 ${isConnecting ? 'animate-ping' : 'animate-pulse'}`}></div>
+                  <div className={`w-4 h-4 rounded-full bg-cyan-600/20 ${isConnecting ? 'animate-ping' : 'animate-pulse'}`}></div>
                 )}
               </div>
             </div>
 
             <div className="w-full space-y-6 flex flex-col items-center relative z-10">
               {error && (
-                <div className="text-red-400 text-center text-sm font-bold bg-red-600/10 px-6 py-4 rounded-2xl border border-red-600/20 max-w-sm">
+                <div className="text-red-400 text-center text-sm font-bold bg-red-600/10 px-6 py-4 rounded-2xl border border-white/20 max-w-sm">
                   {error}
                 </div>
               )}
@@ -280,21 +279,21 @@ const VoiceBot: React.FC = () => {
                 <button 
                   onClick={startSession}
                   disabled={isConnecting}
-                  className={`bg-red-700 text-white px-12 py-5 rounded-2xl text-lg font-black transition-all shadow-2xl flex items-center gap-3 border border-white/20 ${
-                    isConnecting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 hover:scale-105 active:scale-95'
+                  className={`bg-cyan-600 text-white px-12 py-5 rounded-2xl text-lg font-black transition-all shadow-2xl flex items-center gap-3 border border-white/20 ${
+                    isConnecting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-500 hover:scale-105 active:scale-95'
                   }`}
                 >
-                  {isConnecting ? 'Syncing...' : 'Initialize Link'}
+                  {isConnecting ? 'Syncing...' : 'Initialize Neural Link'}
                 </button>
               ) : (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="flex items-center gap-2 text-red-500 animate-pulse text-sm font-bold uppercase tracking-widest">
-                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                  <div className="flex items-center gap-2 text-cyan-400 animate-pulse text-sm font-bold uppercase tracking-widest">
+                    <span className="w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(6,182,212,1)]"></span>
                     Link Active
                   </div>
                   <button 
                     onClick={stopSession}
-                    className="text-slate-500 hover:text-red-500 text-xs font-bold uppercase tracking-widest transition-colors"
+                    className="text-slate-500 hover:text-cyan-400 text-xs font-bold uppercase tracking-widest transition-colors"
                   >
                     Terminate Link
                   </button>

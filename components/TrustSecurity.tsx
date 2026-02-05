@@ -12,7 +12,7 @@ const TrustSecurity: React.FC = () => {
         </div>
         
         <div className="relative z-10">
-          <div className="inline-block bg-red-600/10 text-red-500 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-8 border border-white/20">
+          <div className="inline-block bg-cyan-600/10 text-cyan-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-8 border border-white/20">
             Hardened Security Architecture
           </div>
           <h2 className="text-3xl lg:text-5xl font-bold font-lexend">Enterprise Grade Compliance</h2>

@@ -25,17 +25,17 @@ const Navbar: React.FC = () => {
         <div className={`hidden md:flex items-center gap-8 text-sm font-bold transition-colors ${
           isScrolled ? 'text-slate-300' : 'text-slate-400'
         }`}>
-          <a href="#infrastructure" className="hover:text-red-600 transition-colors tracking-wide">Infrastructure</a>
-          <a href="#auditor" className="hover:text-red-600 transition-colors tracking-wide">Growth Auditor</a>
-          <a href="#faq" className="hover:text-red-600 transition-colors tracking-wide">FAQ</a>
+          <a href="#infrastructure" className="hover:text-cyan-400 transition-colors tracking-wide">Infrastructure</a>
+          <a href="#auditor" className="hover:text-cyan-400 transition-colors tracking-wide">Growth Auditor</a>
+          <a href="#faq" className="hover:text-cyan-400 transition-colors tracking-wide">FAQ</a>
         </div>
 
         <button 
           onClick={() => document.getElementById('auditor')?.scrollIntoView({ behavior: 'smooth' })}
-          className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm ${
+          className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm border border-white/20 ${
             isScrolled 
-              ? 'bg-red-700 text-white hover:bg-red-600 shadow-xl shadow-red-900/10' 
-              : 'bg-white text-slate-950 hover:bg-red-600 hover:text-white shadow-xl shadow-white/5'
+              ? 'bg-cyan-600 text-white hover:bg-cyan-500 shadow-xl shadow-cyan-900/10' 
+              : 'bg-white text-slate-950 hover:bg-cyan-600 hover:text-white shadow-xl shadow-white/5'
           }`}
         >
           Book Session
